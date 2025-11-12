@@ -28,4 +28,44 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### IntelliJ IDEA ###
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# Plugin do IntelliJ
+.idea_modules/
+
+# Cache e configs temporárias
+*.log
+*.tmp
+*.swp
+
+### Compilação Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+
+# Diretórios de build
+target/
+build/
+
+### Sistema operacional ###
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+### Arquivos de ambiente ###
+.env
