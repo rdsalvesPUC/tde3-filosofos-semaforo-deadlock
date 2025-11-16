@@ -42,7 +42,7 @@ O garçom só libera os dois garfos simultaneamente, impedindo dependências enc
 
 Pseudocódigo
 ------------------------------------------------------------------------------
-
+'''
 Estados
 const N = 5                  
 enum Estado { PENSANDO, COM_FOME, COMENDO }
@@ -104,6 +104,8 @@ processo Filosofo(i):
   COMER()
 
   m.lock()
+
+  '''
   estado[i] = PENSANDO
   liberarGarfos(i)
   tentarAtenderFila()
