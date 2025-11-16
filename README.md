@@ -3,10 +3,10 @@
 ## Grupo:
 - Rodrigo da Silva Alves
 - Marco Alija Ramos
-- Richard Mickael 
+- Richard Mickaell Santos Nascimento 
 
 ## Video de Explicações
-[]()
+[Em seguida, temos o link do vídeo postado no Youtube como não listado, que apresenta uma junção de cada problema proposto, sendo explicados da seguinte forma: Jantar dos Filósofos por Richard Mickaell, Semáforo por Marco Alija Ramos e Deadlock por Rodrigo da Silva Alves.](https://www.youtube.com/watch?v=iEoblMfQBMw)
 
 ## Parte 1 - Filósofos
 ### 1.1 Descrição do Problema
