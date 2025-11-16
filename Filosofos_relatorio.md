@@ -41,44 +41,44 @@ Toda espera acontece exclusivamente em relação ao garçom, que decide quem pod
 O garçom só libera os dois garfos simultaneamente, impedindo dependências encadeadas.
 
 📜 Pseudocódigo
-Estados
-const N = 5                  // número de filósofos
+    Estados
+    const N = 5                  // número de filósofos
+    
+    enum Estado { PENSANDO, COM_FOME, COMENDO }
+    
+    Estado estado[N]             // estado de cada filósofo
+    bool garfoLivre[N]           // garfoLivre[i] = true se o garfo estiver livre
+    
+    fila pedidos                 // fila de filósofos esperando para comer
+    
+    mutex m                      // proteção de acesso
+    condicao podeComer[N]        // condição para cada filósofo
 
-enum Estado { PENSANDO, COM_FOME, COMENDO }
+    Funções do Árbitro
+    func garfosDisponiveis(i):
+        esquerda = i
+        direita = (i + 1) mod N
+        return garfoLivre[esquerda] AND garfoLivre[direita]
+    
+    func reservarGarfos(i):
+        esquerda = i
+        direita = (i + 1) mod N
+        garfoLivre[esquerda] = false
+        garfoLivre[direita]  = false
+    
+    func liberarGarfos(i):
+        esquerda = i
+        direita = (i + 1) mod N
+        garfoLivre[esquerda] = true
+        garfoLivre[direita]  = true
 
-Estado estado[N]             // estado de cada filósofo
-bool garfoLivre[N]           // garfoLivre[i] = true se o garfo estiver livre
-
-fila pedidos                 // fila de filósofos esperando para comer
-
-mutex m                      // proteção de acesso
-condicao podeComer[N]        // condição para cada filósofo
-
-Funções do Árbitro
-func garfosDisponiveis(i):
-    esquerda = i
-    direita = (i + 1) mod N
-    return garfoLivre[esquerda] AND garfoLivre[direita]
-
-func reservarGarfos(i):
-    esquerda = i
-    direita = (i + 1) mod N
-    garfoLivre[esquerda] = false
-    garfoLivre[direita]  = false
-
-func liberarGarfos(i):
-    esquerda = i
-    direita = (i + 1) mod N
-    garfoLivre[esquerda] = true
-    garfoLivre[direita]  = true
-
-func tentarAtenderFila():
-    para cada filosofo j na fila 'pedidos' em ordem:
-        se estado[j] == COM_FOME AND garfosDisponiveis(j):
-            reservarGarfos(j)
-            estado[j] = COMENDO
-            remover j da fila 'pedidos'
-            sinalizar podeComer[j]
+    func tentarAtenderFila():
+        para cada filosofo j na fila 'pedidos' em ordem:
+            se estado[j] == COM_FOME AND garfosDisponiveis(j):
+                reservarGarfos(j)
+                estado[j] = COMENDO
+                remover j da fila 'pedidos'
+                sinalizar podeComer[j]
 
 Processo do Filósofo
 processo Filosofo(i):
