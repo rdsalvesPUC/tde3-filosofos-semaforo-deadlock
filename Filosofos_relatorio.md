@@ -39,3 +39,74 @@ A solução com árbitro quebra a condição de Espera Circular:
 Não existe mais um ciclo de dependências entre os filósofos.
 Toda espera acontece exclusivamente em relação ao garçom, que decide quem pode entrar na área crítica.
 O garçom só libera os dois garfos simultaneamente, impedindo dependências encadeadas.
+
+Pseudocódigo
+------------------------------------------------------------------------------
+
+Estados
+const N = 5                  
+enum Estado { PENSANDO, COM_FOME, COMENDO }
+
+Estado estado[N]             
+bool garfoLivre[N]           
+
+fila pedidos                 
+
+mutex m                      
+
+condicao podeComer[N]        
+------------------------------------------------------------------------------
+
+Funções do árbitro
+
+func garfosDisponiveis(i):
+    esquerda = i
+    direita = (i + 1) mod N
+    return garfoLivre[esquerda] AND garfoLivre[direita]
+
+func reservarGarfos(i):
+    esquerda = i
+    direita = (i + 1) mod N
+    garfoLivre[esquerda] = false
+    garfoLivre[direita]  = false
+
+func liberarGarfos(i):
+    esquerda = i
+    direita = (i + 1) mod N
+    garfoLivre[esquerda] = true
+    garfoLivre[direita]  = true
+
+Função central do garçom
+func tentarAtenderFila():
+    para cada filosofo j na fila 'pedidos' em ordem:
+        se estado[j] == COM_FOME AND garfosDisponiveis(j):
+            reservarGarfos(j)
+            estado[j] = COMENDO
+            remover j da fila 'pedidos'
+            sinalizar podeComer[j]
+------------------------------------------------------------------------------
+
+Processo do filósofo
+processo Filosofo(i):
+
+  enquanto verdadeiro:
+        PENSAR()
+        
+  m.lock()
+  estado[i] = COM_FOME
+  enfileirar(pedidos, i)
+  tentarAtenderFila()
+
+  enquanto estado[i] != COMENDO:
+    esperar(podeComer[i], m)
+  fim-enquanto
+
+  m.unlock()
+
+  COMER()
+
+  m.lock()
+  estado[i] = PENSANDO
+  liberarGarfos(i)
+  tentarAtenderFila()
+  m.unlock()
