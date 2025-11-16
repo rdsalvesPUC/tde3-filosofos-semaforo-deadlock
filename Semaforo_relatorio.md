@@ -12,7 +12,7 @@ O desafio do contador concorrente tem como objetivo principal:
 
 1.  Demonstrar uma condição de corrida ao incrementar um contador estático compartilhado por múltiplas threads sem sincronização.
 2.  Corrigir essa condição de corrida utilizando um semáforo binário.
-3.  Comparar os resultados, o tempo de execução e discutir o impacto no *desempenho* e as garantias conceituais.
+3.  Comparar os resultados, o tempo de execução e discutir o impacto no *throughput* e as garantias conceituais.
 
 ### Configuração
 
