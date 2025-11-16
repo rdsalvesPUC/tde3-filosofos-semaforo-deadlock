@@ -53,7 +53,6 @@ bool garfoLivre[N]
 fila pedidos                 
 
 mutex m                      
-
 condicao podeComer[N]        
 ------------------------------------------------------------------------------
 
@@ -76,7 +75,6 @@ func liberarGarfos(i):
     garfoLivre[esquerda] = true
     garfoLivre[direita]  = true
 
-Função central do garçom
 func tentarAtenderFila():
     para cada filosofo j na fila 'pedidos' em ordem:
         se estado[j] == COM_FOME AND garfosDisponiveis(j):
