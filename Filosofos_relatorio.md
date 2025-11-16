@@ -40,48 +40,51 @@ Não existe mais um ciclo de dependências entre os filósofos.
 Toda espera acontece exclusivamente em relação ao garçom, que decide quem pode entrar na área crítica.
 O garçom só libera os dois garfos simultaneamente, impedindo dependências encadeadas.
 
-📜 Pseudocódigo
-    Estados
-    const N = 5                  // número de filósofos
-    
+Pseudocódigo
+
+estados
+
+    const N = 5                  
     enum Estado { PENSANDO, COM_FOME, COMENDO }
     
-    Estado estado[N]             // estado de cada filósofo
-    bool garfoLivre[N]           // garfoLivre[i] = true se o garfo estiver livre
+    Estado estado[N]             
+    bool garfolivre[N]           
     
-    fila pedidos                 // fila de filósofos esperando para comer
+    fila pedidos                 
     
-    mutex m                      // proteção de acesso
-    condicao podeComer[N]        // condição para cada filósofo
+    mutex m                      
+    condicao podecomer[N]        
 
-    Funções do Árbitro
-    func garfosDisponiveis(i):
-        esquerda = i
-        direita = (i + 1) mod N
-        return garfoLivre[esquerda] AND garfoLivre[direita]
+funções do árbitro
     
-    func reservarGarfos(i):
+    func garfosdisponiveis(i):
         esquerda = i
         direita = (i + 1) mod N
-        garfoLivre[esquerda] = false
-        garfoLivre[direita]  = false
+        return garfolivre[esquerda] AND garfolivre[direita]
     
-    func liberarGarfos(i):
+    func reservargarfos(i):
         esquerda = i
         direita = (i + 1) mod N
-        garfoLivre[esquerda] = true
-        garfoLivre[direita]  = true
+        garfolivre[esquerda] = false
+        garfolivre[direita]  = false
+    
+    func liberargarfos(i):
+        esquerda = i
+        direita = (i + 1) mod N
+        garfolivre[esquerda] = true
+        garfolivre[direita]  = true
 
-    func tentarAtenderFila():
+    func tentaratenderFila():
         para cada filosofo j na fila 'pedidos' em ordem:
             se estado[j] == COM_FOME AND garfosDisponiveis(j):
-                reservarGarfos(j)
+                reservargarfos(j)
                 estado[j] = COMENDO
                 remover j da fila 'pedidos'
-                sinalizar podeComer[j]
+                sinalizar podecomer[j]
 
-Processo do Filósofo
-processo Filosofo(i):
+processo do filósofo
+
+    processo filosofo(i):
 
     enquanto verdadeiro:
         PENSAR()
@@ -89,7 +92,7 @@ processo Filosofo(i):
         m.lock()
         estado[i] = COM_FOME
         enfileirar(pedidos, i)
-        tentarAtenderFila()
+        tentaratenderFila()
 
         enquanto estado[i] != COMENDO:
             esperar(podeComer[i], m)
@@ -101,6 +104,6 @@ processo Filosofo(i):
 
         m.lock()
         estado[i] = PENSANDO
-        liberarGarfos(i)
-        tentarAtenderFila()
+        liberargarfos(i)
+        tentaratenderFila()
         m.unlock()
