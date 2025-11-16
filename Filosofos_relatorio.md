@@ -40,24 +40,21 @@ Não existe mais um ciclo de dependências entre os filósofos.
 Toda espera acontece exclusivamente em relação ao garçom, que decide quem pode entrar na área crítica.
 O garçom só libera os dois garfos simultaneamente, impedindo dependências encadeadas.
 
-Pseudocódigo
-------------------------------------------------------------------------------
-'''
+📜 Pseudocódigo
 Estados
-const N = 5                  
+const N = 5                  // número de filósofos
+
 enum Estado { PENSANDO, COM_FOME, COMENDO }
 
-Estado estado[N]             
-bool garfoLivre[N]           
+Estado estado[N]             // estado de cada filósofo
+bool garfoLivre[N]           // garfoLivre[i] = true se o garfo estiver livre
 
-fila pedidos                 
+fila pedidos                 // fila de filósofos esperando para comer
 
-mutex m                      
-condicao podeComer[N]        
-------------------------------------------------------------------------------
+mutex m                      // proteção de acesso
+condicao podeComer[N]        // condição para cada filósofo
 
-Funções do árbitro
-
+Funções do Árbitro
 func garfosDisponiveis(i):
     esquerda = i
     direita = (i + 1) mod N
@@ -82,31 +79,28 @@ func tentarAtenderFila():
             estado[j] = COMENDO
             remover j da fila 'pedidos'
             sinalizar podeComer[j]
-------------------------------------------------------------------------------
 
-Processo do filósofo
+Processo do Filósofo
 processo Filosofo(i):
 
-  enquanto verdadeiro:
+    enquanto verdadeiro:
         PENSAR()
-        
-  m.lock()
-  estado[i] = COM_FOME
-  enfileirar(pedidos, i)
-  tentarAtenderFila()
 
-  enquanto estado[i] != COMENDO:
-    esperar(podeComer[i], m)
-  fim-enquanto
+        m.lock()
+        estado[i] = COM_FOME
+        enfileirar(pedidos, i)
+        tentarAtenderFila()
 
-  m.unlock()
+        enquanto estado[i] != COMENDO:
+            esperar(podeComer[i], m)
+        fim-enquanto
 
-  COMER()
+        m.unlock()
 
-  m.lock()
+        COMER()
 
-  '''
-  estado[i] = PENSANDO
-  liberarGarfos(i)
-  tentarAtenderFila()
-  m.unlock()
+        m.lock()
+        estado[i] = PENSANDO
+        liberarGarfos(i)
+        tentarAtenderFila()
+        m.unlock()
